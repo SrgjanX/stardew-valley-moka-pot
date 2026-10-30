@@ -3,6 +3,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Objects;
+using StardewValley.GameData.Shops;
 
 namespace MokaPot
 {
@@ -62,7 +63,7 @@ namespace MokaPot
         /*********
         ** Private methods
         *********/
-        /// <summary>Add the moka pot item, its sprite, and its crafting recipe to the game data.</summary>
+        /// <summary>Add the moka pot item, its sprite, its crafting recipe, and its shop entry to the game data.</summary>
         private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         {
             if (e.NameWithoutLocale.IsEquivalentTo(this.TextureAssetName))
@@ -95,6 +96,24 @@ namespace MokaPot
                     // format: ingredients / unused / output / is big craftable / unlock condition / display name
                     var data = asset.AsDictionary<string, string>().Data;
                     data[this.MokaPotId] = $"334 2 338 1/Home/{this.MokaPotId}/false/default/Moka Pot";
+                });
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo("Data/Shops"))
+            {
+                e.Edit(asset =>
+                {
+                    // sell the pot at Pierre's General Store; his shop doubles every price, so skip that
+                    var data = asset.AsDictionary<string, ShopData>().Data;
+                    if (data.TryGetValue("SeedShop", out ShopData? shop))
+                    {
+                        shop.Items.Add(new ShopItemData
+                        {
+                            Id = this.MokaPotId,
+                            ItemId = this.MokaPotQualifiedId,
+                            Price = 300,
+                            IgnoreShopPriceModifiers = true
+                        });
+                    }
                 });
             }
         }

@@ -1,6 +1,6 @@
 # Moka Pot (Stardew Valley mod)
 
-A portable moka pot for Stardew Valley 1.6. Craft it, put 2 coffee beans in it anywhere, and
+A portable moka pot for Stardew Valley 1.6. Craft it (or buy it from Pierre), put 2 coffee beans in it anywhere, and
 after 30 in-game minutes you get a Coffee. See [docs/SPEC.md](docs/SPEC.md) for the details.
 
 ## Requirements
@@ -24,7 +24,8 @@ Then launch the game through SMAPI.
 
 ## Try it in game
 
-1. Load a save. The Moka Pot recipe is in the crafting menu (2 Copper Bar + 1 Refined Quartz).
+1. Load a save. The Moka Pot recipe is in the crafting menu (2 Copper Bar + 1 Refined Quartz),
+   or buy one from Pierre's General Store for 300g.
    For quick testing, the SMAPI console can spawn items: `debug item (O)433 10` gives coffee beans
    and `debug item (O)Srgjan.MokaPot_MokaPot` gives the pot.
 2. Hold the pot and right click (or press A) to start a brew.

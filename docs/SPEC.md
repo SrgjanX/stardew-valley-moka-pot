@@ -9,7 +9,7 @@ anywhere (farm, mines, beach), and after a short wait it gives you a normal Coff
 |---|---|---|
 | Balance | 2 coffee beans per brew | A keg uses 5 beans for 1 coffee. Configurable (`BeansPerBrew`). |
 | Brew style | Timed, 30 in-game minutes | A keg takes about 2 hours. Configurable (`BrewMinutes`). |
-| How you get it | Crafting recipe: 2 Copper Bar + 1 Refined Quartz | Known from the start; taught on save load for existing saves. |
+| How you get it | Crafting recipe: 2 Copper Bar + 1 Refined Quartz, or buy it from Pierre for 300g | Recipe known from the start; taught on save load for existing saves. Always in stock at Pierre's, no limit. |
 | Art | Placeholder 16×16 sprite | `MokaPot/assets/moka-pot.png`. Swap in real art any time. |
 
 ## The item
@@ -17,6 +17,7 @@ anywhere (farm, mines, beach), and after a short wait it gives you a normal Coff
 - Added to `Data/Objects` from C# under ID `Srgjan.MokaPot_MokaPot` (qualified `(O)Srgjan.MokaPot_MokaPot`).
 - Type `Basic`, category 0, sells for 150g, not edible.
 - Sprite loaded from the asset `Mods/Srgjan.MokaPot/MokaPot`.
+- Added to Pierre's General Store (`Data/Shops` entry `SeedShop`) for 300g.
 
 ## Using it
 
@@ -45,5 +46,4 @@ it plays a sound and shows "Your moka pot is ready!" once (tracked with `Srgjan.
 - Translations (`i18n/default.json`); text is English only for now.
 - Showing the brew state in the item's tooltip, or a different sprite while brewing.
 - Brewing other drinks (for example Triple Shot Espresso from more beans).
-- A shop entry as an alternative to crafting.
 - Multiplayer has not been tested; it should work per player since each pot holds its own state.
