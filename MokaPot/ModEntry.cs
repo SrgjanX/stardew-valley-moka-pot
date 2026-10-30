@@ -102,7 +102,7 @@ namespace MokaPot
             {
                 e.Edit(asset =>
                 {
-                    // sell the pot at Pierre's General Store; his shop doubles every price, so skip that
+                    // sell the pot and coffee beans at Pierre's General Store; his shop doubles every price, so skip that
                     var data = asset.AsDictionary<string, ShopData>().Data;
                     if (data.TryGetValue("SeedShop", out ShopData? shop))
                     {
@@ -111,6 +111,13 @@ namespace MokaPot
                             Id = this.MokaPotId,
                             ItemId = this.MokaPotQualifiedId,
                             Price = 300,
+                            IgnoreShopPriceModifiers = true
+                        });
+                        shop.Items.Add(new ShopItemData
+                        {
+                            Id = $"{this.ModManifest.UniqueID}_CoffeeBean",
+                            ItemId = CoffeeBeanId,
+                            Price = 20,
                             IgnoreShopPriceModifiers = true
                         });
                     }

@@ -17,7 +17,9 @@ anywhere (farm, mines, beach), and after a short wait it gives you a normal Coff
 - Added to `Data/Objects` from C# under ID `Srgjan.MokaPot_MokaPot` (qualified `(O)Srgjan.MokaPot_MokaPot`).
 - Type `Basic`, category 0, sells for 150g, not edible.
 - Sprite loaded from the asset `Mods/Srgjan.MokaPot/MokaPot`.
-- Added to Pierre's General Store (`Data/Shops` entry `SeedShop`) for 300g.
+- Added to Pierre's General Store (`Data/Shops` entry `SeedShop`) for 300g. The mod also adds
+  Coffee Beans (`(O)433`) there for 20g each. Both entries skip the shop's price doubling
+  (`IgnoreShopPriceModifiers`).
 
 ## Using it
 

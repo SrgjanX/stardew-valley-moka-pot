@@ -25,7 +25,7 @@ Then launch the game through SMAPI.
 ## Try it in game
 
 1. Load a save. The Moka Pot recipe is in the crafting menu (2 Copper Bar + 1 Refined Quartz),
-   or buy one from Pierre's General Store for 300g.
+   or buy one from Pierre's General Store for 300g. Pierre also sells Coffee Beans for 20g each.
    For quick testing, the SMAPI console can spawn items: `debug item (O)433 10` gives coffee beans
    and `debug item (O)Srgjan.MokaPot_MokaPot` gives the pot.
 2. Hold the pot and right click (or press A) to start a brew.
