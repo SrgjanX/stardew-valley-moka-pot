@@ -1,7 +1,7 @@
 {
   "Name": "Moka Pot",
   "Author": "Srgjan",
-  "Version": "0.1.0",
+  "Version": "1.0.0",
   "Description": "A portable moka pot. Carry it anywhere, add coffee beans, and brew a cup on the go.",
   "UniqueID": "Srgjan.MokaPot",
   "EntryDll": "MokaPot.dll",

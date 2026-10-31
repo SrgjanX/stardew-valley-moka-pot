@@ -1,4 +1,4 @@
-# Moka Pot mod: spec (v0.1)
+# Moka Pot mod: spec (v1.0)
 
 A portable moka pot for Stardew Valley 1.6. You carry it like any item, load it with coffee beans
 anywhere (farm, mines, beach), and after a short wait it gives you a normal Coffee.
@@ -66,7 +66,7 @@ game language changes, the mod reloads `Data/Objects` and `Data/CraftingRecipes`
 and descriptions switch too. Coffee, Coffee Bean and the "Drink Coffee?" question are the game's
 own text and are already translated.
 
-## Not in v0.1 (ideas for later)
+## Not in v1.0 (ideas for later)
 
 - Showing the brew time left in the item's tooltip.
 - Multiplayer has not been tested; it should work per player since each pot holds its own state.
