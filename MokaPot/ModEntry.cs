@@ -28,14 +28,17 @@ namespace MokaPot
         /// <summary>The qualified item ID for the moka pot.</summary>
         private string MokaPotQualifiedId = null!;
 
+        /// <summary>The unqualified item ID for a moka pot with its lid open and coffee ready.</summary>
+        private string ReadyPotId = null!;
+
+        /// <summary>The qualified item ID for a moka pot with its lid open and coffee ready.</summary>
+        private string ReadyPotQualifiedId = null!;
+
         /// <summary>The asset name for the moka pot sprite.</summary>
         private string TextureAssetName = null!;
 
         /// <summary>The <c>modData</c> key holding the absolute game minute when the current brew is ready.</summary>
         private string ReadyAtKey = null!;
-
-        /// <summary>The <c>modData</c> key set once the player has been told the brew is ready.</summary>
-        private string NotifiedKey = null!;
 
 
         /*********
@@ -49,13 +52,16 @@ namespace MokaPot
             string modId = this.ModManifest.UniqueID;
             this.MokaPotId = $"{modId}_MokaPot";
             this.MokaPotQualifiedId = $"(O){this.MokaPotId}";
+            this.ReadyPotId = $"{modId}_MokaPotReady";
+            this.ReadyPotQualifiedId = $"(O){this.ReadyPotId}";
             this.TextureAssetName = $"Mods/{modId}/MokaPot";
             this.ReadyAtKey = $"{modId}/ReadyAt";
-            this.NotifiedKey = $"{modId}/Notified";
 
             helper.Events.Content.AssetRequested += this.OnAssetRequested;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+            helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         }
 
@@ -85,6 +91,20 @@ namespace MokaPot
                         Price = 150,
                         Texture = this.TextureAssetName,
                         SpriteIndex = 0,
+                        Edibility = -300
+                    };
+
+                    // same pot with the lid open, swapped in while coffee is ready
+                    data[this.ReadyPotId] = new ObjectData
+                    {
+                        Name = this.ReadyPotId,
+                        DisplayName = "Moka Pot",
+                        Description = "The coffee's ready! Use the pot to pour yourself a cup.",
+                        Type = "Basic",
+                        Category = 0,
+                        Price = 150,
+                        Texture = this.TextureAssetName,
+                        SpriteIndex = 1,
                         Edibility = -300
                     };
                 });
@@ -132,18 +152,41 @@ namespace MokaPot
                 Game1.player.craftingRecipes.Add(this.MokaPotId, 0);
         }
 
-        /// <summary>Tell the player when a pot in their inventory finishes brewing.</summary>
+        /// <summary>Open the lid on pots that finished brewing overnight.</summary>
+        private void OnDayStarted(object? sender, DayStartedEventArgs e)
+        {
+            this.OpenReadyPots();
+        }
+
+        /// <summary>Open the lid on pots that just finished brewing.</summary>
         private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
         {
+            this.OpenReadyPots();
+        }
+
+        /// <summary>Open the lid on ready pots taken out of a chest or picked up.</summary>
+        private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
+        {
+            if (e.IsLocalPlayer)
+                this.OpenReadyPots();
+        }
+
+        /// <summary>Swap each finished pot in the player's inventory for the open-lid version, and tell the player.</summary>
+        private void OpenReadyPots()
+        {
+            if (!Context.IsWorldReady)
+                return;
+
             int now = GetAbsoluteMinutes();
-            foreach (Item? item in Game1.player.Items)
+            for (int i = 0; i < Game1.player.Items.Count; i++)
             {
+                Item? item = Game1.player.Items[i];
                 if (item?.QualifiedItemId != this.MokaPotQualifiedId)
                     continue;
 
-                if (this.TryGetReadyAt(item, out int readyAt) && readyAt <= now && !item.modData.ContainsKey(this.NotifiedKey))
+                if (this.TryGetReadyAt(item, out int readyAt) && readyAt <= now)
                 {
-                    item.modData[this.NotifiedKey] = "true";
+                    Game1.player.Items[i] = CreatePotFrom(item, this.ReadyPotQualifiedId);
                     Game1.playSound("dwop");
                     Game1.addHUDMessage(new HUDMessage("Your moka pot is ready!", HUDMessage.newQuest_type));
                 }
@@ -157,7 +200,7 @@ namespace MokaPot
                 return;
 
             StardewValley.Object? pot = Game1.player.ActiveObject;
-            if (pot?.QualifiedItemId != this.MokaPotQualifiedId)
+            if (pot is null || !this.IsMokaPot(pot))
                 return;
 
             // stop the game from trying to place, eat, or gift the pot
@@ -191,24 +234,41 @@ namespace MokaPot
 
             Game1.player.Items.ReduceId(CoffeeBeanId, beans);
             pot.modData[this.ReadyAtKey] = (GetAbsoluteMinutes() + this.Config.BrewMinutes).ToString();
-            pot.modData.Remove(this.NotifiedKey);
 
             Game1.playSound("bubbles");
             Game1.addHUDMessage(new HUDMessage($"Brewing... ready in {this.Config.BrewMinutes} minutes.", HUDMessage.newQuest_type));
         }
 
-        /// <summary>Give the player a coffee and empty the pot.</summary>
+        /// <summary>Give the player a coffee, empty the pot, and close its lid.</summary>
         /// <param name="pot">The moka pot the player is holding.</param>
         private void CollectCoffee(StardewValley.Object pot)
         {
             pot.modData.Remove(this.ReadyAtKey);
-            pot.modData.Remove(this.NotifiedKey);
+            Game1.player.Items[Game1.player.CurrentToolIndex] = CreatePotFrom(pot, this.MokaPotQualifiedId);
 
             Item coffee = ItemRegistry.Create(CoffeeQualifiedId);
             if (!Game1.player.addItemToInventoryBool(coffee))
                 Game1.createItemDebris(coffee, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
 
             Game1.playSound("coin");
+        }
+
+        /// <summary>Get whether an item is a moka pot, with its lid open or closed.</summary>
+        /// <param name="item">The item to check.</param>
+        private bool IsMokaPot(Item item)
+        {
+            return item.QualifiedItemId == this.MokaPotQualifiedId || item.QualifiedItemId == this.ReadyPotQualifiedId;
+        }
+
+        /// <summary>Create a pot with a different item ID (lid open or closed), keeping the original's stack and brew state.</summary>
+        /// <param name="original">The pot to replace.</param>
+        /// <param name="qualifiedId">The qualified item ID for the new pot.</param>
+        private static Item CreatePotFrom(Item original, string qualifiedId)
+        {
+            Item pot = ItemRegistry.Create(qualifiedId, original.Stack);
+            foreach (var pair in original.modData.Pairs)
+                pot.modData[pair.Key] = pair.Value;
+            return pot;
         }
 
         /// <summary>Get the absolute game minute when the pot's current brew is ready.</summary>

@@ -10,7 +10,7 @@ anywhere (farm, mines, beach), and after a short wait it gives you a normal Coff
 | Balance | 2 coffee beans per brew | A keg uses 5 beans for 1 coffee. Configurable (`BeansPerBrew`). |
 | Brew style | Timed, 30 in-game minutes | A keg takes about 2 hours. Configurable (`BrewMinutes`). |
 | How you get it | Crafting recipe: 2 Copper Bar + 1 Refined Quartz, or buy it from Pierre for 300g | Recipe known from the start; taught on save load for existing saves. Always in stock at Pierre's, no limit. |
-| Art | Placeholder 16×16 sprite | `MokaPot/assets/moka-pot.png`. Swap in real art any time. |
+| Art | Placeholder 16×16 sprites (lid closed, lid open) | `MokaPot/assets/moka-pot.png`. Swap in real art any time. |
 
 ## The item
 
@@ -38,14 +38,19 @@ game doesn't try to place, eat or gift it, and then:
 across days and sleeping. Because the state lives in `modData`, it's saved with the game and
 moves with the pot (chests, other inventory slots, and so on).
 
-## Ready notification
+## Ready: lid opens
 
-On every in-game time change, the mod checks the player's inventory. When a pot's brew has finished
-it plays a sound and shows "Your moka pot is ready!" once (tracked with `Srgjan.MokaPot/Notified`).
+The sprite sheet holds two 16×16 frames: closed lid (index 0) and open lid with coffee showing
+(index 1). The open-lid pot is a second item, `Srgjan.MokaPot_MokaPotReady`, because 1.6 draws an
+object from its data entry's sprite index rather than per item.
+
+When time passes, a new day starts, or the inventory changes, the mod checks the player's
+inventory. A closed pot whose brew has finished is swapped for the open-lid pot (keeping its
+`modData`), with a sound and "Your moka pot is ready!". Collecting the coffee swaps it back to the
+closed pot. A pot that finishes inside a chest opens when you take it out.
 
 ## Not in v0.1 (ideas for later)
 
 - Translations (`i18n/default.json`); text is English only for now.
-- Showing the brew state in the item's tooltip, or a different sprite while brewing.
-- Brewing other drinks (for example Triple Shot Espresso from more beans).
+- Showing the brew time left in the item's tooltip.
 - Multiplayer has not been tested; it should work per player since each pot holds its own state.
