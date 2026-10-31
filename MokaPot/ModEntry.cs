@@ -4,6 +4,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shops;
+using StardewValley.Menus;
 
 namespace MokaPot
 {
@@ -40,6 +41,9 @@ namespace MokaPot
         /// <summary>The <c>modData</c> key holding the absolute game minute when the current brew is ready.</summary>
         private string ReadyAtKey = null!;
 
+        /// <summary>The game tick when the player last pressed the action button while holding coffee, or -1.</summary>
+        private int CoffeeActionTick = -1;
+
 
         /*********
         ** Public methods
@@ -63,6 +67,7 @@ namespace MokaPot
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
         }
 
 
@@ -199,6 +204,13 @@ namespace MokaPot
             if (!Context.IsPlayerFree || !e.Button.IsActionButton())
                 return;
 
+            // let the game handle coffee as usual (gifts, machines, eating), but skip its "Drink Coffee?" prompt in OnMenuChanged
+            if (Game1.player.ActiveObject?.QualifiedItemId == CoffeeQualifiedId)
+            {
+                this.CoffeeActionTick = Game1.ticks;
+                return;
+            }
+
             StardewValley.Object? pot = Game1.player.ActiveObject;
             if (pot is null || !this.IsMokaPot(pot))
                 return;
@@ -212,6 +224,26 @@ namespace MokaPot
                 Game1.showRedMessage($"Still brewing... {readyAt - GetAbsoluteMinutes()} more minutes.");
             else
                 this.CollectCoffee(pot);
+        }
+
+        /// <summary>Answer "yes" to the game's "Drink Coffee?" prompt as soon as it opens.</summary>
+        private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
+        {
+            // only the prompt opened by the coffee press we just saw, not some later question
+            bool pressedCoffee = this.CoffeeActionTick >= 0 && Game1.ticks - this.CoffeeActionTick <= 10;
+            this.CoffeeActionTick = -1;
+
+            if (!this.Config.SkipCoffeePrompt || !pressedCoffee)
+                return;
+
+            if (e.NewMenu is not DialogueBox { isQuestion: true } box
+                || Game1.currentLocation?.lastQuestionKey != "Eat"
+                || Game1.player.ActiveObject?.QualifiedItemId != CoffeeQualifiedId)
+                return;
+
+            // same as picking "Yes": the game handles "Eat_Yes" by eating the held object
+            Game1.currentLocation.answerDialogue(new Response("Yes", ""));
+            box.closeDialogue();
         }
 
         /// <summary>Use coffee beans from the player's inventory to start a brew.</summary>

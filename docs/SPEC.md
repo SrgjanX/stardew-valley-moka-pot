@@ -49,6 +49,14 @@ inventory. A closed pot whose brew has finished is swapped for the open-lid pot 
 `modData`), with a sound and "Your moka pot is ready!". Collecting the coffee swaps it back to the
 closed pot. A pot that finishes inside a chest opens when you take it out.
 
+## Drinking coffee without the prompt
+
+With `SkipCoffeePrompt` on (the default), using any Coffee drinks it straight away instead of asking
+"Drink Coffee?". The mod doesn't take over the button press, so gifting coffee or putting it in a
+machine still works as usual. When the game opens its eat question (`lastQuestionKey` `Eat`)
+within a few ticks of you pressing the action button with Coffee in hand, the mod answers "Yes"
+for you and closes the box. Other food and drinks still ask.
+
 ## Not in v0.1 (ideas for later)
 
 - Translations (`i18n/default.json`); text is English only for now.

@@ -33,4 +33,5 @@ Then launch the game through SMAPI.
 
 ## Config
 
-After the first run, `Mods/MokaPot/config.json` lets you change `BeansPerBrew` and `BrewMinutes`.
+After the first run, `Mods/MokaPot/config.json` lets you change `BeansPerBrew` and `BrewMinutes`, and
+`SkipCoffeePrompt` (default `true`) turns off the "Drink Coffee?" question so coffee is drunk right away.

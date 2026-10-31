@@ -8,5 +8,8 @@ namespace MokaPot
 
         /// <summary>How many in-game minutes a brew takes.</summary>
         public int BrewMinutes { get; set; } = 30;
+
+        /// <summary>Whether to drink coffee right away instead of asking "Drink Coffee?".</summary>
+        public bool SkipCoffeePrompt { get; set; } = true;
     }
 }
