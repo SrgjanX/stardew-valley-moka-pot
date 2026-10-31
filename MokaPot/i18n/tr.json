@@ -1,0 +1,10 @@
+{
+    "item.name": "Moka demlik",
+    "item.description": "Ocakta kullanılan küçük bir kahve makinesi. {{beans}} kahve çekirdeğiyle her yerde bir fincan kahve demleyebilirsin.",
+    "item.description-ready": "Kahve hazır! Kendine bir fincan doldurmak için demliği kullan.",
+    "message.ready": "Moka demliğin hazır!",
+    "message.still-brewing": "Hâlâ demleniyor... {{minutes}} dakika kaldı.",
+    "message.one-pot": "Demlemek için elinde yalnızca bir moka demlik tut.",
+    "message.need-beans": "Demlemek için {{beans}} kahve çekirdeği gerekiyor.",
+    "message.brewing": "Demleniyor... {{minutes}} dakika içinde hazır."
+}

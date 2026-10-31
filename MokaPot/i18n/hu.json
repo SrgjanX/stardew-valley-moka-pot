@@ -1,0 +1,10 @@
+{
+    "item.name": "Kotyogós kávéfőző",
+    "item.description": "Egy kis kávéfőző tűzhelyre. {{beans}} kávébabbal bárhol főzhetsz vele egy csésze kávét.",
+    "item.description-ready": "Kész a kávé! Használd a kávéfőzőt, hogy tölts magadnak egy csészével.",
+    "message.ready": "Kész a kávé a kotyogósban!",
+    "message.still-brewing": "Még fő... még {{minutes}} perc.",
+    "message.one-pot": "A főzéshez csak egy kotyogós kávéfőzőt tarts a kezedben.",
+    "message.need-beans": "A főzéshez {{beans}} kávébab kell.",
+    "message.brewing": "Fő a kávé... {{minutes}} perc múlva kész."
+}

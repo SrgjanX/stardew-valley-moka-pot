@@ -62,6 +62,7 @@ namespace MokaPot
             this.ReadyAtKey = $"{modId}/ReadyAt";
 
             helper.Events.Content.AssetRequested += this.OnAssetRequested;
+            helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
@@ -89,8 +90,8 @@ namespace MokaPot
                     data[this.MokaPotId] = new ObjectData
                     {
                         Name = this.MokaPotId,
-                        DisplayName = "Moka Pot",
-                        Description = $"A little stovetop coffee maker. Use it with {this.Config.BeansPerBrew} coffee beans to brew a cup anywhere.",
+                        DisplayName = this.Helper.Translation.Get("item.name"),
+                        Description = this.Helper.Translation.Get("item.description", new { beans = this.Config.BeansPerBrew }),
                         Type = "Basic",
                         Category = 0,
                         Price = 150,
@@ -103,8 +104,8 @@ namespace MokaPot
                     data[this.ReadyPotId] = new ObjectData
                     {
                         Name = this.ReadyPotId,
-                        DisplayName = "Moka Pot",
-                        Description = "The coffee's ready! Use the pot to pour yourself a cup.",
+                        DisplayName = this.Helper.Translation.Get("item.name"),
+                        Description = this.Helper.Translation.Get("item.description-ready"),
                         Type = "Basic",
                         Category = 0,
                         Price = 150,
@@ -120,7 +121,7 @@ namespace MokaPot
                 {
                     // format: ingredients / unused / output / is big craftable / unlock condition / display name
                     var data = asset.AsDictionary<string, string>().Data;
-                    data[this.MokaPotId] = $"334 2 338 1/Home/{this.MokaPotId}/false/default/Moka Pot";
+                    data[this.MokaPotId] = $"334 2 338 1/Home/{this.MokaPotId}/false/default/{this.Helper.Translation.Get("item.name")}";
                 });
             }
             else if (e.NameWithoutLocale.IsEquivalentTo("Data/Shops"))
@@ -148,6 +149,13 @@ namespace MokaPot
                     }
                 });
             }
+        }
+
+        /// <summary>Reload the item and recipe data so the moka pot's name and descriptions use the new language.</summary>
+        private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
+        {
+            this.Helper.GameContent.InvalidateCache("Data/Objects");
+            this.Helper.GameContent.InvalidateCache("Data/CraftingRecipes");
         }
 
         /// <summary>Make sure the player knows the recipe, including on saves created before the mod was installed.</summary>
@@ -193,7 +201,7 @@ namespace MokaPot
                 {
                     Game1.player.Items[i] = CreatePotFrom(item, this.ReadyPotQualifiedId);
                     Game1.playSound("dwop");
-                    Game1.addHUDMessage(new HUDMessage("Your moka pot is ready!", HUDMessage.newQuest_type));
+                    Game1.addHUDMessage(new HUDMessage(this.Helper.Translation.Get("message.ready"), HUDMessage.newQuest_type));
                 }
             }
         }
@@ -221,7 +229,7 @@ namespace MokaPot
             if (!this.TryGetReadyAt(pot, out int readyAt))
                 this.StartBrew(pot);
             else if (readyAt > GetAbsoluteMinutes())
-                Game1.showRedMessage($"Still brewing... {readyAt - GetAbsoluteMinutes()} more minutes.");
+                Game1.showRedMessage(this.Helper.Translation.Get("message.still-brewing", new { minutes = readyAt - GetAbsoluteMinutes() }));
             else
                 this.CollectCoffee(pot);
         }
@@ -253,14 +261,14 @@ namespace MokaPot
             // pots in a stack share modData, so only brew in a single pot
             if (pot.Stack > 1)
             {
-                Game1.showRedMessage("Hold just one moka pot to brew.");
+                Game1.showRedMessage(this.Helper.Translation.Get("message.one-pot"));
                 return;
             }
 
             int beans = this.Config.BeansPerBrew;
             if (!Game1.player.Items.ContainsId(CoffeeBeanId, beans))
             {
-                Game1.showRedMessage($"You need {beans} coffee beans to brew.");
+                Game1.showRedMessage(this.Helper.Translation.Get("message.need-beans", new { beans }));
                 return;
             }
 
@@ -268,7 +276,7 @@ namespace MokaPot
             pot.modData[this.ReadyAtKey] = (GetAbsoluteMinutes() + this.Config.BrewMinutes).ToString();
 
             Game1.playSound("bubbles");
-            Game1.addHUDMessage(new HUDMessage($"Brewing... ready in {this.Config.BrewMinutes} minutes.", HUDMessage.newQuest_type));
+            Game1.addHUDMessage(new HUDMessage(this.Helper.Translation.Get("message.brewing", new { minutes = this.Config.BrewMinutes }), HUDMessage.newQuest_type));
         }
 
         /// <summary>Give the player a coffee, empty the pot, and close its lid.</summary>

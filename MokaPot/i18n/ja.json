@@ -1,0 +1,10 @@
+{
+    "item.name": "モカポット",
+    "item.description": "コンロで使う小さなコーヒーメーカー。コーヒー豆{{beans}}個で、どこでもコーヒーを1杯いれられる。",
+    "item.description-ready": "コーヒーができた！ポットを使って1杯注ごう。",
+    "message.ready": "モカポットのコーヒーができた！",
+    "message.still-brewing": "まだ抽出中… あと{{minutes}}分。",
+    "message.one-pot": "抽出するにはモカポットを1つだけ持とう。",
+    "message.need-beans": "抽出にはコーヒー豆が{{beans}}個必要だ。",
+    "message.brewing": "抽出中… あと{{minutes}}分でできあがり。"
+}

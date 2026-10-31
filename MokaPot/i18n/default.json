@@ -1,0 +1,10 @@
+{
+    "item.name": "Moka Pot",
+    "item.description": "A little stovetop coffee maker. Use it with {{beans}} coffee beans to brew a cup anywhere.",
+    "item.description-ready": "The coffee's ready! Use the pot to pour yourself a cup.",
+    "message.ready": "Your moka pot is ready!",
+    "message.still-brewing": "Still brewing... {{minutes}} more minutes.",
+    "message.one-pot": "Hold just one moka pot to brew.",
+    "message.need-beans": "You need {{beans}} coffee beans to brew.",
+    "message.brewing": "Brewing... ready in {{minutes}} minutes."
+}

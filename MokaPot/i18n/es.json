@@ -1,0 +1,10 @@
+{
+    "item.name": "Cafetera moka",
+    "item.description": "Una pequeña cafetera para el fogón. Úsala con {{beans}} granos de café para preparar una taza en cualquier lugar.",
+    "item.description-ready": "¡El café está listo! Usa la cafetera para servirte una taza.",
+    "message.ready": "¡Tu cafetera moka está lista!",
+    "message.still-brewing": "Todavía se está preparando... faltan {{minutes}} minutos.",
+    "message.one-pot": "Sostén solo una cafetera moka para preparar café.",
+    "message.need-beans": "Necesitas {{beans}} granos de café para preparar café.",
+    "message.brewing": "Preparando... listo en {{minutes}} minutos."
+}

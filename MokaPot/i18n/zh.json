@@ -1,0 +1,10 @@
+{
+    "item.name": "摩卡壶",
+    "item.description": "一个小巧的炉灶咖啡壶。放入{{beans}}颗咖啡豆，随时随地煮一杯咖啡。",
+    "item.description-ready": "咖啡煮好了！使用咖啡壶给自己倒一杯吧。",
+    "message.ready": "你的摩卡壶煮好了！",
+    "message.still-brewing": "还在煮……还要{{minutes}}分钟。",
+    "message.one-pot": "一次只能拿着一个摩卡壶来煮咖啡。",
+    "message.need-beans": "煮咖啡需要{{beans}}颗咖啡豆。",
+    "message.brewing": "正在煮……{{minutes}}分钟后煮好。"
+}

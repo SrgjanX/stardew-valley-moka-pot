@@ -1,0 +1,10 @@
+{
+    "item.name": "Mokakanne",
+    "item.description": "Eine kleine Espressokanne für den Herd. Mit {{beans}} Kaffeebohnen brühst du überall eine Tasse Kaffee.",
+    "item.description-ready": "Der Kaffee ist fertig! Benutze die Kanne, um dir eine Tasse einzuschenken.",
+    "message.ready": "Deine Mokakanne ist fertig!",
+    "message.still-brewing": "Brüht noch... noch {{minutes}} Minuten.",
+    "message.one-pot": "Halte nur eine Mokakanne in der Hand, um zu brühen.",
+    "message.need-beans": "Du brauchst {{beans}} Kaffeebohnen zum Brühen.",
+    "message.brewing": "Brüht... fertig in {{minutes}} Minuten."
+}

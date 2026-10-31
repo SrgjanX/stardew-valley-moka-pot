@@ -1,0 +1,10 @@
+{
+    "item.name": "모카 포트",
+    "item.description": "스토브에서 쓰는 작은 커피 메이커. 커피콩 {{beans}}개로 어디서든 커피 한 잔을 내릴 수 있다.",
+    "item.description-ready": "커피가 다 됐다! 포트를 사용해 한 잔 따르자.",
+    "message.ready": "모카 포트의 커피가 완성됐어요!",
+    "message.still-brewing": "아직 추출 중... {{minutes}}분 남았어요.",
+    "message.one-pot": "추출하려면 모카 포트를 하나만 들고 있어야 해요.",
+    "message.need-beans": "추출하려면 커피콩 {{beans}}개가 필요해요.",
+    "message.brewing": "추출 중... {{minutes}}분 후에 완성돼요."
+}

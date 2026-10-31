@@ -57,8 +57,16 @@ machine still works as usual. When the game opens its eat question (`lastQuestio
 within a few ticks of you pressing the action button with Coffee in hand, the mod answers "Yes"
 for you and closes the box. Other food and drinks still ask.
 
+## Translations
+
+All 8 texts the mod shows (item name, two descriptions, five messages) come from `MokaPot/i18n/`:
+`default.json` (English) plus `de`, `es`, `fr`, `hu`, `it`, `ja`, `ko`, `pt`, `ru`, `tr` and `zh`, one
+for each language the game ships. Counts use the `{{beans}}` and `{{minutes}}` tokens. When the
+game language changes, the mod reloads `Data/Objects` and `Data/CraftingRecipes` so the pot's name
+and descriptions switch too. Coffee, Coffee Bean and the "Drink Coffee?" question are the game's
+own text and are already translated.
+
 ## Not in v0.1 (ideas for later)
 
-- Translations (`i18n/default.json`); text is English only for now.
 - Showing the brew time left in the item's tooltip.
 - Multiplayer has not been tested; it should work per player since each pot holds its own state.
